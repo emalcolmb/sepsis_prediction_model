@@ -12,6 +12,8 @@ st.title("🩺 Sepsis Decision Support System")
 st.markdown("""
 #### A Real-Time Prediction and Decision Support Tool for Healthcare Professionals
 This system provides doctors with insights to assess sepsis risk based on patient data, assisting in quick and accurate decision-making in critical care.
+
+The tool will be updated to integrate multiple machine learning models currently under development by the research team, including a Convolutional Neural Network (CNN) and a MicroLSTM. The final step for integration involves standardizing the preprocessing workflow to ensure data compatibility across models and correctly formatting the input data for each model's specific requirements.
 """)
 
 # Sidebar for Navigation and Information
@@ -22,11 +24,11 @@ st.sidebar.write("""
 """)
 st.sidebar.header("About Sepsis")
 st.sidebar.write("""
-Sepsis is a potentially life-threatening condition caused by the body's response to infection. Rapid detection and treatment can prevent severe complications and improve patient outcomes. This tool uses synthetic data to simulate predictions for patient risk levels.
+Sepsis is a potentially life-threatening condition caused by the body's response to infection. Rapid detection and treatment can prevent severe complications and improve patient outcomes. 
 """)
 
-# Synthetic data with the same columns used in the explanation
-synthetic_data = {
+# Sample patient data
+sample_data = {
     "Patient_ID": ["P001", "P002", "P003", "P004", "P005", "P006", "P007", "P008", "P009", "P010", "P011", "P012", "P013"],
     "HR": [120, 115, 130, 95, 100, 105, 70, 65, 75, 80, 85, 60, 68],
     "O2Sat": [85, 88, 80, 95, 97, 90, 99, 98, 97, 96, 95, 100, 99],
@@ -38,26 +40,26 @@ synthetic_data = {
     "Risk_Level": ["High", "High", "High", "Moderate", "Moderate", "Moderate", "Low", "Low", "Low", "Low", "Low", "Low", "Low"]
 }
 
-# Synthetic risk probabilities
-synthetic_probabilities = {
+# Simulated risk probabilities for demonstration
+risk_probabilities = {
     "High": [0.85, 0.78, 0.92],
     "Moderate": [0.65, 0.60, 0.70],
     "Low": [0.20, 0.18, 0.25, 0.15, 0.12, 0.10, 0.08]
 }
 
-synthetic_df = pd.DataFrame(synthetic_data)
+sample_df = pd.DataFrame(sample_data)
 
 # Sidebar - Patient Selection
 st.sidebar.subheader("Select Patient ID")
-patient_options = [""] + synthetic_df["Patient_ID"].tolist()  # Add empty option as default
+patient_options = [""] + sample_df["Patient_ID"].tolist()  # Add empty option as default
 selected_patient = st.sidebar.selectbox("Choose Patient ID:", patient_options)
 
 # Ensure the user selects a valid Patient ID
 if selected_patient:
     # Extract the selected patient's data
-    selected_patient_data = synthetic_df[synthetic_df["Patient_ID"] == selected_patient]
+    selected_patient_data = sample_df[sample_df["Patient_ID"] == selected_patient]
     risk_level = selected_patient_data["Risk_Level"].values[0]
-    risk_percentage = round(np.random.choice(synthetic_probabilities[risk_level]) * 100, 1)  # Simulate risk probability
+    risk_percentage = round(np.random.choice(risk_probabilities[risk_level]) * 100, 1)  # Simulate risk probability
     features = selected_patient_data.drop(columns=["Patient_ID", "Risk_Level"]).to_dict('records')[0]
 
     # Main Section - Prediction and Explanation
@@ -104,9 +106,9 @@ else:
 st.markdown("---")
 st.markdown("""
 **About This Tool**  
-The Sepsis Decision Support System demonstrates a simple way to categorize and explain patient risk levels using synthetic data.
+The Sepsis Decision Support System demonstrates how to categorize and explain patient risk levels using simulated patient data. Future updates will integrate CNN and MicroLSTM models with a standardized preprocessing workflow.
 
 **Disclaimer**  
 This tool is intended for demonstration purposes and should not replace clinical judgment.
 """)
-st.sidebar.markdown("© 2024 Sepsis Support Tool | Synthetic Data Version")
+st.sidebar.markdown("© 2024 Sepsis Support Tool | Development Version")
